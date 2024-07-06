@@ -30,3 +30,20 @@ allprojects {
 tasks.register("clean", Delete::class).configure {
     delete(rootProject.buildDir)
 }
+
+subprojects {
+    afterEvaluate {
+        this.extensions.findByType<PublishingExtension>()?.apply {
+            repositories {
+                maven {
+                    name = "burnoo"
+                    url = uri("https://pkgs.dev.azure.com/burnoo/maven/_packaging/public/maven/v1")
+                    credentials {
+                        username = rootProject.findProperty("azureUsername")?.toString()
+                        password = rootProject.findProperty("azureKey")?.toString()
+                    }
+                }
+            }
+        }
+    }
+}
