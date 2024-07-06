@@ -31,6 +31,7 @@ tasks.register("clean", Delete::class).configure {
     delete(rootProject.buildDir)
 }
 
+// Adds burnoo's maven to all subprojects and disable artifact signing
 subprojects {
     afterEvaluate {
         this.extensions.findByType<PublishingExtension>()?.apply {
@@ -45,5 +46,7 @@ subprojects {
                 }
             }
         }
+
+        this.tasks.withType<Sign>().configureEach { enabled = false }
     }
 }
